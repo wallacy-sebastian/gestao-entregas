@@ -52,6 +52,8 @@ const icons: Record<string, string> = {
   gift: '<path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8"/><path d="M12 2v20M2 12h20M8 2l4 4 4-4"/>',
   info: '<circle cx="12" cy="12" r="10"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
   moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+  bolt: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10" fill="currentColor" stroke="none"/>',
+  'bolt-outline': '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/>',
   list: '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>',
   'map-pin': '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
   'pie-chart':
@@ -83,6 +85,8 @@ const ariaLabels: Record<string, string> = {
   info: 'Informação',
   moon: 'Modo escuro',
   pencil: 'Editar',
+  bolt: 'Animações ativadas',
+  'bolt-outline': 'Animações desativadas',
   list: 'Lista',
   'map-pin': 'Localização',
   'pie-chart': 'Gráfico',

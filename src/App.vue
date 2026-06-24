@@ -28,6 +28,13 @@
           >
             <IconSprite :name="darkMode.isDark.value ? 'sun-full' : 'moon'" size="20" />
           </button>
+          <button
+            @click="animToggle.toggle()"
+            class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-700 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#2463eb]/20"
+            :aria-label="animToggle.animationsEnabled.value ? 'Desativar animações' : 'Ativar animações'"
+          >
+            <IconSprite :name="animToggle.animationsEnabled.value ? 'bolt' : 'bolt-outline'" size="20" />
+          </button>
         </div>
       </header>
 
@@ -106,6 +113,7 @@
 import { ref, onMounted } from 'vue'
 import { useDeliveryActions } from '@/composables/useDeliveryActions'
 import { useDarkMode } from '@/composables/useDarkMode'
+import { useAnimationToggle } from '@/composables/useAnimationToggle'
 import AddDeliveryModal from '@/components/AddDeliveryModal.vue'
 import DeliveryInfoPanel from '@/components/DeliveryInfoPanel.vue'
 import DeliveryList from '@/components/DeliveryList.vue'
@@ -120,6 +128,7 @@ import IconSprite from '@/components/IconSprite.vue'
 const novaListaModalAberto = ref(false)
 
 const darkMode = useDarkMode()
+const animToggle = useAnimationToggle()
 
 const {
   list,
@@ -157,6 +166,7 @@ const {
 
 onMounted(() => {
   darkMode.init()
+  animToggle.init()
   inicializar()
 })
 </script>

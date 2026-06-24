@@ -52,3 +52,11 @@
   opacity: 0;
   transform: translateY(20px);
 }
+
+.no-animations,
+.no-animations *,
+.no-animations *::before,
+.no-animations *::after {
+  transition: none !important;
+  animation: none !important;
+}

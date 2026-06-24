@@ -43,6 +43,7 @@ src/
     useUIState.ts                  — panel/modal/dialog state (not persisted)
     useNotification.ts             — module-level refs consumed by ToastNotification.vue
     useDarkMode.ts                 — dark mode toggle (localStorage + system pref)
+    useAnimationToggle.ts          — animation toggle (localStorage)
     useBodyScrollLock.ts           — modal body scroll lock
     useFocusTrap.ts                — keyboard focus trapping for dialogs
     useCopy.ts                     — clipboard copy with feedback
@@ -84,6 +85,6 @@ src/
 - All business logic lives **in the Pinia store**, not in components. Components call through `useDeliveryActions` orchestrator.
 - Store does NOT touch the DOM — side effects go through `useNotification` (module-level refs) which `ToastNotification.vue` watches (3200ms auto-dismiss).
 - Duplicate name resolution opens `ResolveDuplicateDialog.vue` (auto-shown when `store.duplicataPendente` is set).
-- localStorage keys: `delivery_list`, `delivery_date`, `delivery_limit` (persistence), `delivery_dark_mode` (dark mode).
+- localStorage keys: `delivery_list`, `delivery_date`, `delivery_limit` (persistence), `delivery_dark_mode` (dark mode), `delivery_animations` (animation toggle).
 - `vue-tsc --build` uses tsconfig project references (`tsconfig.app.json` + `tsconfig.node.json`). Build info in `node_modules/.tmp/`.
 - Node `^20.19.0 \|\| >=22.12.0`.
