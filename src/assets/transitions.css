@@ -1,0 +1,54 @@
+.backdrop-enter-active,
+.backdrop-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.backdrop-enter-from,
+.backdrop-leave-to {
+  opacity: 0;
+}
+
+.dialog-enter-active,
+.dialog-leave-active {
+  transition: all 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+.dialog-enter-from {
+  opacity: 0;
+  transform: scale(0.95) translateY(-10px);
+}
+
+.dialog-leave-to {
+  opacity: 0;
+  transform: scale(0.95) translateY(5px);
+}
+
+.panel-content-enter-active,
+.panel-content-leave-active {
+  transition: all 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+.panel-content-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.panel-content-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
+}
+
+.toast-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.toast-leave-to {
+  opacity: 0;
+  transform: translateY(20px);
+}

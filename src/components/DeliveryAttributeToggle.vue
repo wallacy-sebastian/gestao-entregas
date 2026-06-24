@@ -1,31 +1,36 @@
 <template>
   <label
-    class="flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all duration-200 cursor-pointer"
-    :class="modelValue ? 'bg-blue-50/50 shadow-sm' : 'border-slate-200 hover:border-slate-300 bg-white'"
+    class="flex flex-col items-center gap-2 p-3 rounded-xl border transition-all duration-200 cursor-pointer"
+    :class="modelValue ? [activeBgClass || 'bg-slate-100', darkActiveBgClass, 'hover:brightness-95'] : 'border-slate-200 hover:border-slate-300 bg-white dark:bg-gray-700 dark:border-gray-600 dark:hover:border-gray-500'"
     :style="modelValue ? `border-color: ${borderColor}` : ''"
   >
     <input type="checkbox" :checked="modelValue" class="hidden" @change="toggle" />
     <div
       class="w-10 h-10 rounded-full flex items-center justify-center transition-all"
-      :class="modelValue ? activeClass : 'bg-slate-100'"
+      :class="modelValue ? activeClass : 'bg-slate-100 dark:bg-gray-600'"
     >
-      <span class="text-lg" :class="modelValue ? '' : 'opacity-70'">{{ emoji }}</span>
+      <IconSprite :name="icon" size="18" :class="modelValue ? 'text-white' : 'text-slate-400 dark:text-gray-500'" />
     </div>
     <span
       class="text-xs font-medium"
-      :class="modelValue ? textActiveClass : 'text-slate-500'"
+      :class="modelValue ? [textActiveClass, darkTextActiveClass] : 'text-slate-500 dark:text-gray-400'"
     >{{ label }}</span>
   </label>
 </template>
 
 <script setup lang="ts">
+import IconSprite from '@/components/IconSprite.vue'
+
 const props = defineProps<{
   modelValue: boolean
   label: string
-  emoji: string
+  icon: string
   activeClass: string
   textActiveClass: string
   borderColor: string
+  activeBgClass?: string
+  darkActiveBgClass?: string
+  darkTextActiveClass?: string
 }>()
 
 const emit = defineEmits<{

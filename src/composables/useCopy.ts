@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-export function useCopy(defaultText = '📋 Copiar lista') {
+export function useCopy(defaultText = 'Copiar') {
   const copyBtnText = ref(defaultText)
 
   function resetText(): void {
@@ -10,9 +10,9 @@ export function useCopy(defaultText = '📋 Copiar lista') {
   async function copyText(text: string): Promise<void> {
     try {
       await navigator.clipboard.writeText(text)
-      copyBtnText.value = '✅ Copiado!'
+      copyBtnText.value = 'Copiado!'
     } catch {
-      copyBtnText.value = '❌ Erro'
+      copyBtnText.value = 'Erro'
     }
     resetText()
   }

@@ -11,19 +11,19 @@ export function useDeliveryActions() {
 
   const { list, limit, date, duplicataPendente } = storeToRefs(store)
 
-  function handleNovoCommand(days: number): void {
-    const result = store.novoCommand(days)
+  function handleNovoCommand(data: Date): void {
+    const result = store.novoCommand(data)
     if (result.success) {
       ui.ocultarPainel()
     } else if ('needsConfirmation' in result && result.needsConfirmation) {
-      ui.definirNovaListaPendente(days, result.listLength)
+      ui.definirNovaListaPendente(data, result.listLength)
     }
   }
 
   function handleConfirmarNovaLista(): void {
     const pending = ui.novaListaPendente.value
     if (!pending) return
-    store.forcarNovoCommand(pending.days)
+    store.forcarNovoCommand(pending.date)
     ui.limparNovaListaPendente()
     ui.ocultarPainel()
   }
@@ -39,10 +39,8 @@ export function useDeliveryActions() {
     }
     const result = store.verEntregasPersistente()
     if (!result.valid) {
-      ui.exibirPainel(
-        result.mode === 'no-list' ? 'Sem lista ativa' : 'Entregas do dia',
-        result.mode,
-      )
+      const titulo = result.mode === 'no-list' ? 'Sem lista ativa' : 'Lista do dia'
+      ui.exibirPainel(titulo, result.mode)
       return
     }
     ui.exibirPainel('Relação de entregas', 'delivery-list', { deliveriesData: result.data })
@@ -69,12 +67,16 @@ export function useDeliveryActions() {
       exibirNotificacao('Resolva a pendência de duplicata primeiro.', true)
       return
     }
+    if (!store.date) {
+      exibirNotificacao('Crie uma lista primeiro clicando em "Nova lista".', true)
+      return
+    }
     ui.abrirModal()
   }
 
   function handleEnviarModal(data: DeliveryFormData): void {
-    const result = store.adicionarPedidoLogic(data.num, data.nome, data.ap, data.manha, data.brinde)
-    if (result.success) {
+    const result = store.adicionarPedidoLogic(data.num, data.name, data.ap, data.manha, data.brinde, data.cidade)
+    if (result.success || ('isDuplicate' in result && result.isDuplicate)) {
       ui.fecharModal()
     }
   }
@@ -92,24 +94,25 @@ export function useDeliveryActions() {
   }
 
   function handleRemoverDoModal(numero: string): void {
+    const result = store.removerPedido(numero)
+    if (result.success) {
+      ui.fecharRemoverModal()
+    }
+  }
+
+  function handleRemoverDelivery(numero: string): void {
     store.removerPedido(numero)
-    ui.fecharRemoverModal()
   }
 
   function handleConfirmarResolucao(existing: string, novo: string): void {
     store.resolverDuplicata(existing, novo)
-    ui.ocultarPainel()
   }
 
   function handleCancelarResolucao(): void {
     store.ignorarDuplicata()
-    ui.ocultarPainel()
   }
 
   function handleOcultarPainel(): void {
-    if (store.duplicataPendente) {
-      store.ignorarDuplicata()
-    }
     ui.ocultarPainel()
   }
 
@@ -142,6 +145,7 @@ export function useDeliveryActions() {
     handleEnviarModal,
     handleAbrirRemoverModal,
     handleRemoverDoModal,
+    handleRemoverDelivery,
     handleConfirmarResolucao,
     handleCancelarResolucao,
     handleOcultarPainel,

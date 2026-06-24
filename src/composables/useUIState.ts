@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import type { DeliveryListData, ReportStats } from '@/stores/delivery'
 
-export type InfoPanelMode = 'no-list' | 'no-deliveries' | 'delivery-list' | 'report' | 'duplicate-info'
+export type InfoPanelMode = 'no-list' | 'no-deliveries' | 'delivery-list' | 'report'
 
 export function useUIState() {
   const modalAberto = ref(false)
@@ -32,16 +32,17 @@ export function useUIState() {
 
   function ocultarPainel(): void {
     painelVisivel.value = false
+    painelTitulo.value = 'Informações'
     painelModo.value = 'no-list'
     painelDadosEntregas.value = null
     painelDadosRelatorio.value = null
     painelDataRelatorio.value = ''
   }
 
-  const novaListaPendente = ref<{ days: number; listLength: number } | null>(null)
+  const novaListaPendente = ref<{ date: Date; listLength: number } | null>(null)
 
-  function definirNovaListaPendente(days: number, listLength: number): void {
-    novaListaPendente.value = { days, listLength }
+  function definirNovaListaPendente(date: Date, listLength: number): void {
+    novaListaPendente.value = { date, listLength }
   }
 
   function limparNovaListaPendente(): void {

@@ -32,7 +32,9 @@ src/
   main.ts                 — createApp + Pinia + mount
   App.vue                 — wires components to store
   stores/delivery.ts      — domain state, types, business logic only
-  assets/main.css         — @import 'tailwindcss'
+  assets/
+    main.css              — @import 'tailwindcss', @custom-variant dark
+    transitions.css       — Vue <Transition> classes (backdrop, dialog, panel-content, toast)
   utils/
     format.ts             — date/number formatting, day-of-week constants
     persistence.ts        — localStorage read/write

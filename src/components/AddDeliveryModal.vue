@@ -1,18 +1,17 @@
 <template>
   <Teleport to="body">
-    <Transition name="modal-backdrop" appear>
+    <Transition name="backdrop" appear>
       <div
         ref="modalRef"
         role="dialog"
         aria-modal="true"
         aria-label="Adicionar entrega"
-        class="fixed inset-0 z-[1000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-all duration-300"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm transition-all duration-300"
         @click.self="handleClose"
-        @keydown.escape="handleClose"
       >
-        <Transition name="modal-content" appear>
+        <Transition name="dialog" appear>
           <div
-            class="bg-white rounded-2xl w-full max-w-md shadow-2xl border border-white/20 overflow-hidden transition-all duration-300 transform"
+            class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-md shadow-2xl border border-white/20 dark:border-gray-700/50 overflow-hidden transition-all duration-300 transform"
           >
             <div class="relative">
               <div
@@ -26,8 +25,8 @@
                     <IconSprite name="box" size="20" class="text-white" />
                   </div>
                   <div>
-                    <h3 class="text-xl font-bold text-slate-800">Adicionar entrega</h3>
-                    <p class="text-xs text-slate-400 mt-0.5">
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-gray-100">Adicionar entrega</h3>
+                    <p class="text-xs text-slate-500 dark:text-gray-400 mt-0.5">
                       Preencha os dados da nova rota
                       <span v-if="currentCount !== undefined" class="text-[#2463eb]">
                         ({{ currentCount }}/{{ maxLimit }})
@@ -36,7 +35,7 @@
                   </div>
                 </div>
                 <button
-                  class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-all duration-200 cursor-pointer"
+                  class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 active:scale-[0.98] transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#2463eb]/20"
                   aria-label="Fechar"
                   @click="handleClose"
                 >
@@ -45,9 +44,9 @@
               </div>
             </div>
 
-            <div class="p-6 space-y-5">
+            <div class="p-6 space-y-4">
               <div class="space-y-2">
-                <label class="text-sm font-semibold text-slate-600 flex items-center gap-1.5">
+                <label class="text-sm font-semibold text-slate-600 dark:text-gray-300 flex items-center gap-1.5">
                   <IconSprite name="calendar" size="14" class="text-[#2463eb]" />
                   Número do pedido
                   <span class="text-rose-500">*</span>
@@ -67,10 +66,10 @@
                     @keyup.enter="handleSubmit"
                     @input="validateForm"
                     :class="[
-                      'w-full py-3 pl-8 pr-4 border rounded-xl font-mono text-sm transition-all focus:outline-none bg-slate-50/50 hover:bg-white',
+                      'w-full py-3 pl-8 pr-4 border rounded-xl font-mono text-sm transition-all focus:outline-none bg-slate-50/50 hover:bg-white dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200',
                       numeroError
-                        ? 'border-rose-300 focus:border-rose-500 focus:ring-2 focus:ring-rose-200'
-                        : 'border-slate-200 focus:border-[#2463eb] focus:ring-2 focus:ring-[#2463eb]/20',
+                        ? 'border-rose-300 focus:border-rose-500 focus-visible:ring-2 focus-visible:ring-rose-200'
+                        : 'border-slate-200 dark:border-gray-600 focus:border-[#2463eb] focus-visible:ring-2 focus-visible:ring-[#2463eb]/20',
                     ]"
                   />
                 </div>
@@ -81,7 +80,7 @@
               </div>
 
               <div class="space-y-2">
-                <label class="text-sm font-semibold text-slate-600 flex items-center gap-1.5">
+                <label class="text-sm font-semibold text-slate-600 dark:text-gray-300 flex items-center gap-1.5">
                   <IconSprite name="user" size="14" class="text-[#2463eb]" />
                   Nome do cliente
                   <span class="text-rose-500">*</span>
@@ -92,16 +91,16 @@
                   </div>
                   <input
                     type="text"
-                    v-model="formData.nome"
+                     v-model="formData.name"
                     placeholder="Ex: João Silva, Maria Oliveira"
                     autocomplete="off"
                     @keyup.enter="handleSubmit"
                     @input="validateForm"
                     :class="[
-                      'w-full py-3 pl-9 pr-4 border rounded-xl text-sm transition-all focus:outline-none bg-slate-50/50 hover:bg-white',
+                      'w-full py-3 pl-9 pr-4 border rounded-xl text-sm transition-all focus:outline-none bg-slate-50/50 hover:bg-white dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200',
                       nomeError
-                        ? 'border-rose-300 focus:border-rose-500 focus:ring-2 focus:ring-rose-200'
-                        : 'border-slate-200 focus:border-[#2463eb] focus:ring-2 focus:ring-[#2463eb]/20',
+                        ? 'border-rose-300 focus:border-rose-500 focus-visible:ring-2 focus-visible:ring-rose-200'
+                        : 'border-slate-200 dark:border-gray-600 focus:border-[#2463eb] focus-visible:ring-2 focus-visible:ring-[#2463eb]/20',
                     ]"
                   />
                 </div>
@@ -112,7 +111,28 @@
               </div>
 
               <div class="space-y-2">
-                <label class="text-sm font-semibold text-slate-600 flex items-center gap-1.5">
+                <label class="text-sm font-semibold text-slate-600 dark:text-gray-300 flex items-center gap-1.5">
+                  <IconSprite name="map-pin" size="14" class="text-[#2463eb]" />
+                  Cidade
+                  <span class="text-slate-400 dark:text-gray-500 font-normal text-xs">(opcional)</span>
+                </label>
+                <div class="relative">
+                  <div class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+                    <IconSprite name="map-pin" size="14" />
+                  </div>
+                  <input
+                    type="text"
+                    v-model="formData.cidade"
+                    placeholder="Ex: São Paulo, Rio de Janeiro"
+                    autocomplete="off"
+                    @keyup.enter="handleSubmit"
+                    class="w-full py-3 pl-9 pr-4 border border-slate-200 dark:border-gray-600 rounded-xl text-sm transition-all focus:outline-none bg-slate-50/50 hover:bg-white dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 focus:border-[#2463eb] focus-visible:ring-2 focus-visible:ring-[#2463eb]/20"
+                  />
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label class="text-sm font-semibold text-slate-600 dark:text-gray-300 flex items-center gap-1.5">
                   <IconSprite name="list" size="14" class="text-[#2463eb]" />
                   Características da entrega
                 </label>
@@ -123,18 +143,32 @@
                     :model-value="formData[attr.key]"
                     @update:model-value="formData[attr.key] = $event"
                     :label="attr.label"
-                    :emoji="attr.emoji"
+                    :icon="attr.icon"
                     :active-class="attr.activeClass"
                     :text-active-class="attr.textActiveClass"
                     :border-color="attr.borderColor"
+                    :active-bg-class="attr.activeBgClass"
+                    :dark-active-bg-class="attr.darkActiveBgClass"
+                    :dark-text-active-class="attr.darkTextActiveClass"
                   />
                 </div>
               </div>
             </div>
 
-            <div class="flex gap-3 p-6 pt-0 border-t border-slate-200">
+            <div
+              v-if="isLimitReached"
+              class="mx-6 mb-3 p-3 rounded-xl bg-amber-50 border border-amber-200"
+            >
+              <p class="text-xs text-amber-700 flex items-center gap-2">
+                <IconSprite name="alert-circle" size="14" class="shrink-0 text-amber-600" />
+                Limite máximo de {{ maxLimit }} entregas atingido. Remova algum pedido para
+                adicionar mais.
+              </p>
+            </div>
+
+            <div class="flex gap-3 p-6 pt-0 border-t border-slate-200 dark:border-gray-700">
               <button
-                class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-all cursor-pointer"
+                class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-gray-600 text-slate-600 dark:text-gray-300 font-medium hover:bg-slate-50 dark:hover:bg-gray-700 active:scale-[0.98] transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[#2463eb]/20"
                 @click="handleClose"
               >
                 Cancelar
@@ -142,27 +176,16 @@
               <button
                 :disabled="!isFormValid || isLimitReached"
 :class="[
-  'flex-1 px-4 py-2.5 rounded-xl font-medium text-white cursor-pointer transition-all duration-200 flex items-center justify-center gap-2',
+  'flex-1 px-4 py-2.5 rounded-xl font-semibold text-white cursor-pointer transition-all duration-200 flex items-center justify-center gap-2',
   isFormValid && !isLimitReached
-    ? 'bg-linear-to-r from-[#2463eb] to-[#1a4fc9] shadow-md shadow-blue-500/30 hover:shadow-lg hover:shadow-blue-500/40 hover:scale-[1.02] active:scale-[0.98]'
-    : 'bg-slate-200 text-slate-400 cursor-not-allowed',
+    ? 'bg-linear-to-r from-emerald-500 to-teal-600 hover:shadow-lg hover:shadow-emerald-500/30 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-emerald-500/40'
+    : 'bg-slate-200 dark:bg-gray-600 text-slate-400 dark:text-gray-500 cursor-not-allowed',
 ]"
                 @click="handleSubmit"
               >
-                <IconSprite name="check" size="16" :stroke-width="2.5" />
+                <IconSprite name="check" size="18" />
                 Adicionar à rota
               </button>
-            </div>
-
-            <div
-              v-if="isLimitReached"
-              class="mx-6 mb-6 p-3 rounded-xl bg-amber-50 border border-amber-200"
-            >
-              <p class="text-xs text-amber-700 flex items-center gap-2">
-                <IconSprite name="alert-circle" size="14" class="shrink-0 text-amber-600" />
-                Limite máximo de {{ maxLimit }} entregas atingido. Remova algum pedido para
-                adicionar mais.
-              </p>
             </div>
           </div>
         </Transition>
@@ -197,7 +220,7 @@ const modalRef = ref<HTMLDivElement | null>(null)
 const numInputRef = ref<HTMLInputElement | null>(null)
 
 const { lock: lockScroll, unlock: unlockScroll } = useBodyScrollLock()
-useFocusTrap(modalRef)
+useFocusTrap(modalRef, handleClose)
 
 onMounted(() => {
   lockScroll()
@@ -211,16 +234,17 @@ onUnmounted(() => {
 
 const formData = reactive<DeliveryFormData>({
   num: '',
-  nome: '',
+  name: '',
+  cidade: '',
   ap: false,
   manha: false,
   brinde: false,
 })
 
-const atributos: { key: 'ap' | 'manha' | 'brinde'; label: string; emoji: string; activeClass: string; textActiveClass: string; borderColor: string }[] = [
-  { key: 'ap', label: 'Apartamento', emoji: '🏢', activeClass: 'bg-linear-to-br from-[#2463eb] to-[#1a4fc9] shadow-md shadow-blue-500/25', textActiveClass: 'text-[#2463eb]', borderColor: '#2463eb' },
-  { key: 'manha', label: 'Manhã', emoji: '🌅', activeClass: 'bg-linear-to-br from-amber-500 to-orange-500 shadow-md shadow-amber-500/25', textActiveClass: 'text-amber-500', borderColor: '#f59e0b' },
-  { key: 'brinde', label: 'Brinde', emoji: '🎁', activeClass: 'bg-linear-to-br from-pink-500 to-rose-500 shadow-md shadow-pink-500/25', textActiveClass: 'text-pink-500', borderColor: '#ec4899' },
+const atributos: { key: 'ap' | 'manha' | 'brinde'; label: string; icon: string; activeClass: string; textActiveClass: string; borderColor: string; activeBgClass: string; darkActiveBgClass: string; darkTextActiveClass: string }[] = [
+  { key: 'ap', label: 'Apartamento', icon: 'building', activeClass: 'bg-indigo-500 shadow-md shadow-indigo-500/25', textActiveClass: 'text-indigo-500', borderColor: '#6366f1', activeBgClass: 'bg-indigo-50/50', darkActiveBgClass: 'dark:bg-indigo-900/30', darkTextActiveClass: 'dark:text-indigo-400' },
+  { key: 'manha', label: 'Manhã', icon: 'sun', activeClass: 'bg-amber-500 shadow-md shadow-amber-500/25', textActiveClass: 'text-amber-500', borderColor: '#f59e0b', activeBgClass: 'bg-amber-50/50', darkActiveBgClass: 'dark:bg-amber-900/30', darkTextActiveClass: 'dark:text-amber-400' },
+  { key: 'brinde', label: 'Brinde', icon: 'gift', activeClass: 'bg-pink-500 shadow-md shadow-pink-500/25', textActiveClass: 'text-pink-500', borderColor: '#ec4899', activeBgClass: 'bg-pink-50/50', darkActiveBgClass: 'dark:bg-pink-900/30', darkTextActiveClass: 'dark:text-pink-400' },
 ]
 
 const numeroError = ref<string>('')
@@ -230,7 +254,7 @@ const validateForm = () => {
   const numErr = formData.num ? validarNumero(formData.num) : null
   numeroError.value = numErr ?? ''
 
-  const nomeErr = formData.nome ? validarNome(formData.nome) : null
+  const nomeErr = formData.name ? validarNome(formData.name) : null
   nomeError.value = nomeErr ?? ''
 }
 
@@ -238,8 +262,8 @@ const isFormValid = computed(() => {
   return (
     formData.num.trim() !== '' &&
     !validarNumero(formData.num) &&
-    formData.nome.trim() !== '' &&
-    !validarNome(formData.nome) &&
+    formData.name.trim() !== '' &&
+    !validarNome(formData.name) &&
     numeroError.value === '' &&
     nomeError.value === ''
   )
@@ -252,40 +276,16 @@ const isLimitReached = computed(() => {
   return false
 })
 
-const handleClose = () => {
+function handleClose() {
   emit('close')
 }
 
 const handleSubmit = () => {
+  validateForm()
   if (isFormValid.value && !isLimitReached.value) {
     emit('submit', { ...formData })
   }
 }
 </script>
 
-<style scoped>
-.modal-backdrop-enter-active,
-.modal-backdrop-leave-active {
-  transition: opacity 0.25s ease;
-}
 
-.modal-backdrop-enter-from,
-.modal-backdrop-leave-to {
-  opacity: 0;
-}
-
-.modal-content-enter-active,
-.modal-content-leave-active {
-  transition: all 0.3s cubic-bezier(0.34, 1.2, 0.64, 1);
-}
-
-.modal-content-enter-from {
-  opacity: 0;
-  transform: scale(0.95) translateY(-10px);
-}
-
-.modal-content-leave-to {
-  opacity: 0;
-  transform: scale(0.95) translateY(5px);
-}
-</style>

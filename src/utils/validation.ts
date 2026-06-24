@@ -27,29 +27,29 @@ export function validarPedido(
   }
 
   if (!numero || !nome) {
-    return { valid: false, error: '❌ Número e nome são obrigatórios.' }
+    return { valid: false, error: 'Número e nome são obrigatórios.' }
   }
 
   if (!/^\d+$/.test(numero)) {
-    return { valid: false, error: '❌ Número do pedido deve conter apenas dígitos.' }
+    return { valid: false, error: 'Número do pedido deve conter apenas dígitos.' }
   }
 
   if (nome.trim().length < 2) {
-    return { valid: false, error: '❌ Nome deve ter pelo menos 2 caracteres.' }
+    return { valid: false, error: 'Nome deve ter pelo menos 2 caracteres.' }
   }
 
   const existingNumIndex = list.findIndex((e) => e && e.num === numero)
   if (existingNumIndex !== -1) {
     return {
       valid: false,
-      error: `❌ Número ${numero} já existe na posição ${existingNumIndex + 1}`,
+      error: `Número ${numero} já existe na posição ${existingNumIndex + 1}`,
     }
   }
 
   if (list.length >= limit) {
     return {
       valid: false,
-      error: `❌ Limite de ${limit} entregas atingido. Remova algum pedido.`,
+      error: `Limite de ${limit} entregas atingido. Remova algum pedido.`,
     }
   }
 

@@ -1,6 +1,9 @@
 import { onMounted, onUnmounted, type Ref } from 'vue'
 
-export function useFocusTrap(containerRef: Ref<HTMLElement | null>) {
+export function useFocusTrap(
+  containerRef: Ref<HTMLElement | null>,
+  onEscape?: () => void,
+) {
   function getFocusableElements(): HTMLElement[] {
     if (!containerRef.value) return []
     const elements = containerRef.value.querySelectorAll<HTMLElement>(
@@ -10,6 +13,11 @@ export function useFocusTrap(containerRef: Ref<HTMLElement | null>) {
   }
 
   function handleKeyDown(e: KeyboardEvent): void {
+    if (e.key === 'Escape') {
+      onEscape?.()
+      return
+    }
+
     if (e.key !== 'Tab') return
     const focusable = getFocusableElements()
     if (focusable.length === 0) return

@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 .custom-scroll {
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 #f1f5f9;
@@ -19,4 +21,17 @@
 }
 .custom-scroll::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
+}
+
+.dark .custom-scroll {
+  scrollbar-color: #475569 #1e293b;
+}
+.dark .custom-scroll::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+.dark .custom-scroll::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+.dark .custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
 }

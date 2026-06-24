@@ -8,6 +8,7 @@ import { formatDate } from '@/utils/format'
 export interface Delivery {
   num: string
   name: string
+  cidade?: string
   ap: boolean
   manha: boolean
   brinde: boolean
@@ -15,7 +16,8 @@ export interface Delivery {
 
 export interface DeliveryFormData {
   num: string
-  nome: string
+  name: string
+  cidade?: string
   ap: boolean
   manha: boolean
   brinde: boolean
@@ -31,6 +33,7 @@ export interface ReportStats {
   ap: number
   brinde: number
   total: number
+  cidades: Record<string, number>
 }
 
 export type AdicionarResult =
@@ -76,10 +79,10 @@ export const useDeliveryStore = defineStore('delivery', () => {
       return false
     }
 
-    const nomeOriginal = newEntry.name.trim().toLowerCase()
+    const nameOriginal = newEntry.name.trim().toLowerCase()
 
     for (const item of list.value) {
-      if (item && item.name.trim().toLowerCase() === nomeOriginal) {
+      if (item && item.name.trim().toLowerCase() === nameOriginal) {
         item.name += ` ${suffixExistente.trim()}`
       }
     }
@@ -103,12 +106,13 @@ export const useDeliveryStore = defineStore('delivery', () => {
 
   function adicionarPedidoLogic(
     numero: string,
-    nome: string,
+    name: string,
     isAp: boolean,
     isManha: boolean,
     isBrinde: boolean,
+    cidade?: string,
   ): AdicionarResult {
-    const validacao = validarPedido(numero, nome, date.value, list.value, limit.value)
+    const validacao = validarPedido(numero, name, date.value, list.value, limit.value)
     if (!validacao.valid) {
       exibirNotificacao(validacao.error!, true)
       return { success: false, error: validacao.error! }
@@ -116,7 +120,8 @@ export const useDeliveryStore = defineStore('delivery', () => {
 
     const newEntry: Delivery = {
       num: numero,
-      name: nome.trim(),
+      name: name.trim(),
+      cidade: cidade?.trim() || undefined,
       ap: isAp,
       manha: isManha,
       brinde: isBrinde,
@@ -174,7 +179,7 @@ export const useDeliveryStore = defineStore('delivery', () => {
     }
   }
 
-  function novoCommand(days: number): NovoResult {
+  function novoCommand(data: Date): NovoResult {
     if (duplicataPendente.value) {
       exibirNotificacao(
         'Resolva a pendência de duplicata primeiro.',
@@ -187,22 +192,18 @@ export const useDeliveryStore = defineStore('delivery', () => {
       return { success: false, needsConfirmation: true, listLength: list.value.length }
     }
 
-    const d = new Date()
-    d.setDate(d.getDate() + days)
-    date.value = d
+    date.value = data
     list.value = []
     duplicataPendente.value = null
-    exibirNotificacao(`Lista criada para ${formatDate(d)} · limite de ${limit.value} entregas.`)
+    exibirNotificacao(`Lista criada para ${formatDate(data)} · limite de ${limit.value} entregas.`)
     return { success: true }
   }
 
-  function forcarNovoCommand(days: number): NovoResult {
-    const d = new Date()
-    d.setDate(d.getDate() + days)
-    date.value = d
+  function forcarNovoCommand(data: Date): NovoResult {
+    date.value = data
     list.value = []
     duplicataPendente.value = null
-    exibirNotificacao(`Lista criada para ${formatDate(d)} · limite de ${limit.value} entregas.`)
+    exibirNotificacao(`Lista criada para ${formatDate(data)} · limite de ${limit.value} entregas.`)
     return { success: true }
   }
 
@@ -226,10 +227,16 @@ export const useDeliveryStore = defineStore('delivery', () => {
     const ap = list.value.filter((e) => e && e.ap).length
     const brinde = list.value.filter((e) => e && e.brinde).length
     const total = list.value.length
+    const cidades: Record<string, number> = {}
+    for (const e of list.value) {
+      if (e && e.cidade) {
+        cidades[e.cidade] = (cidades[e.cidade] ?? 0) + 1
+      }
+    }
 
     return {
       valid: true,
-      stats: { manha, ap, brinde, total },
+      stats: { manha, ap, brinde, total, cidades },
       date: formatDate(date.value),
     }
   }
