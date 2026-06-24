@@ -18,11 +18,12 @@ export function validarPedido(
   date: Date | null,
   list: Delivery[],
   limit: number,
+  editNum?: string,
 ): { valid: boolean; error?: string } {
   if (!date) {
     return {
       valid: false,
-      error: 'Crie uma lista primeiro clicando em "Amanhã" ou "Depois"',
+      error: 'Crie uma lista primeiro clicando em "Nova lista"',
     }
   }
 
@@ -38,15 +39,17 @@ export function validarPedido(
     return { valid: false, error: 'Nome deve ter pelo menos 2 caracteres.' }
   }
 
-  const existingNumIndex = list.findIndex((e) => e && e.num === numero)
-  if (existingNumIndex !== -1) {
-    return {
-      valid: false,
-      error: `Número ${numero} já existe na posição ${existingNumIndex + 1}`,
+  if (numero !== editNum) {
+    const existingNumIndex = list.findIndex((e) => e && e.num === numero)
+    if (existingNumIndex !== -1) {
+      return {
+        valid: false,
+        error: `Número ${numero} já existe na posição ${existingNumIndex + 1}`,
+      }
     }
   }
 
-  if (list.length >= limit) {
+  if (editNum === undefined && list.length >= limit) {
     return {
       valid: false,
       error: `Limite de ${limit} entregas atingido. Remova algum pedido.`,
@@ -56,9 +59,10 @@ export function validarPedido(
   return { valid: true }
 }
 
-export function verificarDuplicataNome(nome: string, list: Delivery[]): number[] {
+export function verificarDuplicataNome(nome: string, list: Delivery[], ignoreIndices?: number[]): number[] {
   const nomeNormalizado = nome.trim().toLowerCase()
   return list.reduce<number[]>((acc, e, i) => {
+    if (ignoreIndices?.includes(i)) return acc
     if (e && e.name && e.name.trim().toLowerCase() === nomeNormalizado) {
       acc.push(i)
     }

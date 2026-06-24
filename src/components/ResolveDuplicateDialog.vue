@@ -28,7 +28,9 @@
                     <h3 class="text-xl font-bold text-slate-800 dark:text-gray-100">
                       Resolver duplicata de nome
                     </h3>
-                    <p class="text-xs text-slate-500 dark:text-gray-400 mt-0.5">Adicione sobrenomes para diferenciar</p>
+                    <p class="text-xs text-slate-500 dark:text-gray-400 mt-0.5">
+                      Adicione sobrenomes para diferenciar
+                    </p>
                   </div>
                 </div>
                 <button
@@ -41,78 +43,85 @@
               </div>
             </div>
 
-          <div class="p-6 space-y-4">
-            <div>
-              <p class="text-sm text-slate-600 dark:text-gray-300 mb-2">
-                Já existe(m) pedido(s) com o nome
-                "<strong class="text-[#2463eb]">{{ nomeDuplicata }}</strong>"
-              </p>
-              <p class="text-xs text-slate-500 dark:text-gray-400">
-                Posições: {{ posicoes }}
-              </p>
-            </div>
-            <div>
-              <label class="text-sm font-semibold text-slate-600 dark:text-gray-300 flex items-center gap-1.5 mb-2">
-                <IconSprite name="user-search" size="14" class="text-[#2463eb]" />
-                Sobrenome para pedidos EXISTENTES
-              </label>
-              <input
-                ref="existingInput"
-                v-model="suffixExisting"
-                type="text"
-                placeholder="Ex: Silva, Santos, Oliveira"
-                @keyup.enter="handleConfirm"
-                class="w-full px-4 py-3 border border-slate-200 dark:border-gray-600 rounded-xl focus-visible:ring-2 focus-visible:ring-[#2463eb]/20 focus:border-[#2463eb] focus:outline-none transition-all bg-slate-50/50 hover:bg-white dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200"
-              />
-              <p class="text-xs text-slate-500 dark:text-gray-400 mt-1">
-                Será adicionado ao(s) pedido(s): {{ nomesExistentes }}
+            <div class="p-6 space-y-4">
+              <div>
+                <p class="text-sm text-slate-600 dark:text-gray-300 mb-2">
+                  Já existe um pedido com o nome "<strong class="text-[#2463eb]">{{
+                    nomeDuplicata
+                  }}</strong
+                  >"
+                </p>
+                <p class="text-xs text-slate-500 dark:text-gray-400">Posições: {{ posicoes }}</p>
+              </div>
+              <div>
+                <label
+                  class="text-sm font-semibold text-slate-600 dark:text-gray-300 flex items-center gap-1.5 mb-2"
+                >
+                  <IconSprite name="user-search" size="14" class="text-[#2463eb]" />
+                  Sobrenome para o pedido EXISTENTE
+                </label>
+                <input
+                  ref="existingInput"
+                  v-model="suffixExisting"
+                  type="text"
+                  placeholder="Ex: Silva, Santos, Oliveira"
+                  @keyup.enter="handleConfirm"
+                  class="w-full px-4 py-3 border border-slate-200 dark:border-gray-600 rounded-xl focus-visible:ring-2 focus-visible:ring-[#2463eb]/20 focus:border-[#2463eb] focus:outline-none transition-all bg-slate-50/50 hover:bg-white dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200"
+                />
+                <p class="text-xs text-slate-500 dark:text-gray-400 mt-1">
+                  Será adicionado ao pedido {{ primeiroExistenteNum }}
+                </p>
+              </div>
+
+              <div>
+                <label
+                  class="text-sm font-semibold text-slate-600 dark:text-gray-300 flex items-center gap-1.5 mb-2"
+                >
+                  <IconSprite name="user" size="14" class="text-[#2463eb]" />
+                  Sobrenome para o NOVO pedido
+                </label>
+                <input
+                  v-model="suffixNew"
+                  type="text"
+                  placeholder="Ex: Souza, Costa, Pereira"
+                  @keyup.enter="handleConfirm"
+                  class="w-full px-4 py-3 border border-slate-200 dark:border-gray-600 rounded-xl focus-visible:ring-2 focus-visible:ring-[#2463eb]/20 focus:border-[#2463eb] focus:outline-none transition-all bg-slate-50/50 hover:bg-white dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200"
+                />
+                <p class="text-xs text-slate-500 dark:text-gray-400 mt-1">
+                  Será adicionado ao pedido {{ numeroEntrada }}
+                </p>
+              </div>
+
+              <p
+                v-if="erroMsg"
+                class="text-xs text-rose-500 dark:text-rose-400 flex items-center gap-1"
+              >
+                <IconSprite name="alert-circle" size="12" class="shrink-0" />
+                {{ erroMsg }}
               </p>
             </div>
 
-            <div>
-              <label class="text-sm font-semibold text-slate-600 dark:text-gray-300 flex items-center gap-1.5 mb-2">
-                <IconSprite name="user" size="14" class="text-[#2463eb]" />
-                Sobrenome para NOVO pedido
-              </label>
-              <input
-                v-model="suffixNew"
-                type="text"
-                placeholder="Ex: Souza, Costa, Pereira"
-                @keyup.enter="handleConfirm"
-                class="w-full px-4 py-3 border border-slate-200 dark:border-gray-600 rounded-xl focus-visible:ring-2 focus-visible:ring-[#2463eb]/20 focus:border-[#2463eb] focus:outline-none transition-all bg-slate-50/50 hover:bg-white dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200"
-              />
-              <p class="text-xs text-slate-500 dark:text-gray-400 mt-1">
-                Será adicionado ao pedido {{ numeroEntrada }}
-              </p>
+            <div class="flex gap-3 p-6 pt-0 border-t border-slate-200 dark:border-gray-700">
+              <button
+                class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-gray-600 text-slate-600 dark:text-gray-300 font-medium hover:bg-slate-50 dark:hover:bg-gray-700 active:scale-[0.98] transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[#2463eb]/20"
+                @click="handleCancel"
+              >
+                Cancelar
+              </button>
+              <button
+                :disabled="!isValid"
+                :class="[
+                  'flex-1 px-4 py-2.5 rounded-xl font-semibold transition-all flex items-center justify-center gap-2',
+                  isValid
+                    ? 'bg-linear-to-r from-amber-500 to-orange-600 text-white hover:shadow-lg hover:shadow-amber-500/30 hover:scale-[1.02] active:scale-[0.98] cursor-pointer focus-visible:ring-2 focus-visible:ring-amber-500/40'
+                    : 'bg-slate-200 dark:bg-gray-600 text-slate-400 dark:text-gray-500 cursor-not-allowed',
+                ]"
+                @click="handleConfirm"
+              >
+                Confirmar e Adicionar
+              </button>
             </div>
-
-            <p v-if="erroMsg" class="text-xs text-rose-500 flex items-center gap-1">
-              <IconSprite name="alert-circle" size="12" class="shrink-0" />
-              {{ erroMsg }}
-            </p>
           </div>
-
-          <div class="flex gap-3 p-6 pt-0 border-t border-slate-200 dark:border-gray-700">
-            <button
-              class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-gray-600 text-slate-600 dark:text-gray-300 font-medium hover:bg-slate-50 dark:hover:bg-gray-700 active:scale-[0.98] transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[#2463eb]/20"
-              @click="handleCancel"
-            >
-              Cancelar
-            </button>
-            <button
-              :disabled="!isValid"
-              :class="[
-                'flex-1 px-4 py-2.5 rounded-xl font-semibold transition-all flex items-center justify-center gap-2',
-                isValid
-                  ? 'bg-linear-to-r from-amber-500 to-orange-600 text-white hover:shadow-lg hover:shadow-amber-500/30 hover:scale-[1.02] active:scale-[0.98] cursor-pointer'
-                  : 'bg-slate-200 dark:bg-gray-600 text-slate-400 dark:text-gray-500 cursor-not-allowed',
-              ]"
-              @click="handleConfirm"
-            >
-              Confirmar e Adicionar
-            </button>
-          </div>
-        </div>
         </Transition>
       </div>
     </Transition>
@@ -147,12 +156,10 @@ useFocusTrap(dialogRef, handleCancel)
 
 const nomeDuplicata = computed(() => props.duplicataPendente?.newEntry.name ?? '')
 const numeroEntrada = computed(() => props.duplicataPendente?.newEntry.num ?? '')
-const nomesExistentes = computed(() => {
-  if (!props.duplicataPendente) return ''
-  return props.duplicataPendente.existingIndices
-    .map((idx) => props.lista[idx]?.name ?? '')
-    .filter(Boolean)
-    .join(', ')
+const primeiroExistenteNum = computed(() => {
+  const idx = props.duplicataPendente?.existingIndices[0]
+  if (idx === undefined) return ''
+  return props.lista[idx]?.num ?? ''
 })
 const posicoes = computed(() => {
   if (!props.duplicataPendente) return ''
@@ -191,5 +198,3 @@ function handleCancel() {
   emit('cancel')
 }
 </script>
-
-

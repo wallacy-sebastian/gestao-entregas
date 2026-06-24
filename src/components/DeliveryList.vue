@@ -19,7 +19,7 @@
         </div>
         <div class="flex items-center gap-2">
           <div
-            class="bg-linear-to-r from-[#2463eb]/10 to-[#1a4fc9]/10 py-1.5 px-3.5 rounded-full text-xs font-medium text-[#2463eb] font-mono flex items-center gap-1.5"
+            class="bg-linear-to-r from-[#2463eb]/10 to-[#1a4fc9]/10 dark:from-[#2463eb]/20 dark:to-[#1a4fc9]/20 py-1.5 px-3.5 rounded-full text-xs font-medium text-[#2463eb] dark:text-[#60a5fa] font-mono flex items-center gap-1.5"
           >
             <IconSprite name="list" size="12" />
             <span>{{ limitBadgeText }}</span>
@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="p-5" v-if="hasValidDeliveries">
+    <div class="p-6" v-if="hasValidDeliveries">
       <div
         class="mb-6 p-4 rounded-xl bg-linear-to-r from-slate-50 to-blue-50/30 dark:from-gray-800 dark:to-gray-800/50 border border-slate-100 dark:border-gray-700"
       >
@@ -88,7 +88,7 @@
                   v-if="item.manha"
                   class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400"
                 >
-                  <IconSprite name="sun" size="10" />
+                  <IconSprite name="sun-full" size="10" />
                   Manhã
                 </span>
                 <span
@@ -101,6 +101,13 @@
               </div>
             </div>
 
+            <button
+              class="shrink-0 w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-[#2463eb] hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#2463eb]/40"
+              @click.stop="emit('edit', item.num)"
+              :aria-label="'Editar ' + item.num"
+            >
+              <IconSprite name="pencil" size="16" />
+            </button>
             <button
               class="shrink-0 w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-red-500/40"
               @click.stop="emit('remove', item.num)"
@@ -169,6 +176,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const emit = defineEmits<{
+  (e: 'edit', numero: string): void
   (e: 'remove', numero: string): void
 }>()
 

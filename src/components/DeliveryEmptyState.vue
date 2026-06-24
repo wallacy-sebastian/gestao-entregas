@@ -9,7 +9,7 @@
       >
         <IconSprite
           v-if="hasList"
-          name="sun"
+          name="sun-full"
           :size="compact ? 28 : 32"
           class="text-amber-400"
           :stroke-width="1.5"
@@ -30,8 +30,7 @@
           Use o botão <strong class="bg-slate-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">Adicionar</strong> para incluir pedidos na rota
         </template>
         <template v-else>
-          Clique em <strong class="bg-slate-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">Amanhã</strong> ou
-          <strong class="bg-slate-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">Depois</strong> para começar
+          Clique em <strong class="bg-slate-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">Nova lista</strong> para começar
         </template>
       </p>
     </div>

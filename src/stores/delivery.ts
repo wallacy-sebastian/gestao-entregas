@@ -84,6 +84,7 @@ export const useDeliveryStore = defineStore('delivery', () => {
     for (const item of list.value) {
       if (item && item.name.trim().toLowerCase() === nameOriginal) {
         item.name += ` ${suffixExistente.trim()}`
+        break
       }
     }
 
@@ -111,8 +112,9 @@ export const useDeliveryStore = defineStore('delivery', () => {
     isManha: boolean,
     isBrinde: boolean,
     cidade?: string,
+    editNum?: string,
   ): AdicionarResult {
-    const validacao = validarPedido(numero, name, date.value, list.value, limit.value)
+    const validacao = validarPedido(numero, name, date.value, list.value, limit.value, editNum)
     if (!validacao.valid) {
       exibirNotificacao(validacao.error!, true)
       return { success: false, error: validacao.error! }
@@ -127,9 +129,17 @@ export const useDeliveryStore = defineStore('delivery', () => {
       brinde: isBrinde,
     }
 
-    const duplicateIndices = verificarDuplicataNome(newEntry.name, list.value)
+    const ignoreIndices = editNum !== undefined
+      ? [list.value.findIndex((e) => e && e.num === editNum)]
+      : undefined
+
+    const duplicateIndices = verificarDuplicataNome(newEntry.name, list.value, ignoreIndices)
 
     if (duplicateIndices.length > 0) {
+      if (editNum !== undefined) {
+        return { success: false, error: 'Nome já existe na lista. Escolha um nome diferente.' }
+      }
+
       if (duplicataPendente.value) {
         exibirNotificacao('Já existe uma pendência de duplicata para resolver.', true)
         return { success: false, error: 'Já existe uma pendência de duplicata para resolver.' }

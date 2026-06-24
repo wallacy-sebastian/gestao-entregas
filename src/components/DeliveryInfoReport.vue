@@ -24,17 +24,17 @@
       </div>
       <div class="bg-linear-to-br from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/40 rounded-xl p-3">
         <div class="text-xs text-slate-500 dark:text-gray-400 mb-1">Manhã</div>
-        <div class="text-2xl font-bold text-amber-600">{{ reportStats.manha }}</div>
+        <div class="text-2xl font-bold text-amber-600 dark:text-amber-400">{{ reportStats.manha }}</div>
         <div class="text-xs text-slate-400 dark:text-gray-500 mt-1">{{ percentStr('manha') }}% do total</div>
       </div>
       <div class="bg-linear-to-br from-indigo-50 to-purple-50 dark:from-indigo-950/40 dark:to-purple-950/40 rounded-xl p-3">
         <div class="text-xs text-slate-500 dark:text-gray-400 mb-1">Apartamentos</div>
-        <div class="text-2xl font-bold text-indigo-600">{{ reportStats.ap }}</div>
+        <div class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{{ reportStats.ap }}</div>
         <div class="text-xs text-slate-400 dark:text-gray-500 mt-1">{{ percentStr('ap') }}% do total</div>
       </div>
       <div class="bg-linear-to-br from-pink-50 to-rose-50 dark:from-pink-950/40 dark:to-rose-950/40 rounded-xl p-3">
         <div class="text-xs text-slate-500 dark:text-gray-400 mb-1">Brindes</div>
-        <div class="text-2xl font-bold text-pink-600">{{ reportStats.brinde }}</div>
+        <div class="text-2xl font-bold text-pink-600 dark:text-pink-400">{{ reportStats.brinde }}</div>
         <div class="text-xs text-slate-400 dark:text-gray-500 mt-1">{{ percentStr('brinde') }}% do total</div>
       </div>
     </div>
@@ -45,7 +45,7 @@
       </div>
       <div class="space-y-1">
         <div v-for="[cidade, count] in cidadeEntries" :key="cidade" class="flex items-center gap-2 text-sm">
-          <span class="font-bold text-emerald-600 min-w-[2ch] tabular-nums">{{ count }}</span>
+          <span class="font-bold text-emerald-600 dark:text-emerald-400 min-w-[2ch] tabular-nums">{{ count }}</span>
           <span class="text-slate-600 dark:text-gray-300">{{ cidade }}</span>
         </div>
       </div>

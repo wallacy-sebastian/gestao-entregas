@@ -25,10 +25,10 @@
                     <IconSprite name="box" size="20" class="text-white" />
                   </div>
                   <div>
-                    <h3 class="text-xl font-bold text-slate-800 dark:text-gray-100">Adicionar entrega</h3>
+                    <h3 class="text-xl font-bold text-slate-800 dark:text-gray-100">{{ isEditing ? 'Editar entrega' : 'Adicionar entrega' }}</h3>
                     <p class="text-xs text-slate-500 dark:text-gray-400 mt-0.5">
-                      Preencha os dados da nova rota
-                      <span v-if="currentCount !== undefined" class="text-[#2463eb]">
+                      {{ isEditing ? 'Altere os dados da entrega' : 'Preencha os dados da nova rota' }}
+                      <span v-if="!isEditing && currentCount !== undefined" class="text-[#2463eb]">
                         ({{ currentCount }}/{{ maxLimit }})
                       </span>
                     </p>
@@ -157,7 +157,7 @@
 
             <div
               v-if="isLimitReached"
-              class="mx-6 mb-3 p-3 rounded-xl bg-amber-50 border border-amber-200"
+              class="mx-6 mb-3 p-3 rounded-xl bg-amber-50 border border-amber-200 dark:bg-amber-950/40 dark:border-amber-900/50"
             >
               <p class="text-xs text-amber-700 flex items-center gap-2">
                 <IconSprite name="alert-circle" size="14" class="shrink-0 text-amber-600" />
@@ -184,7 +184,7 @@
                 @click="handleSubmit"
               >
                 <IconSprite name="check" size="18" />
-                Adicionar à rota
+                {{ isEditing ? 'Salvar alterações' : 'Adicionar à rota' }}
               </button>
             </div>
           </div>
@@ -195,8 +195,8 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, computed, ref, onMounted, onUnmounted, nextTick } from 'vue'
-import type { DeliveryFormData } from '@/stores/delivery'
+import { reactive, computed, ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import type { Delivery, DeliveryFormData } from '@/stores/delivery'
 import { validarNumero, validarNome } from '@/utils/validation'
 import IconSprite from '@/components/IconSprite.vue'
 import DeliveryAttributeToggle from '@/components/DeliveryAttributeToggle.vue'
@@ -206,6 +206,7 @@ import { useFocusTrap } from '@/composables/useFocusTrap'
 interface Props {
   currentCount?: number
   maxLimit?: number
+  editDelivery?: Delivery | null
 }
 
 interface Emits {
@@ -213,7 +214,7 @@ interface Emits {
   (e: 'submit', data: DeliveryFormData): void
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), { editDelivery: null })
 const emit = defineEmits<Emits>()
 
 const modalRef = ref<HTMLDivElement | null>(null)
@@ -241,9 +242,26 @@ const formData = reactive<DeliveryFormData>({
   brinde: false,
 })
 
+const isEditing = computed(() => !!props.editDelivery)
+
+watch(
+  () => props.editDelivery,
+  (delivery) => {
+    if (delivery) {
+      formData.num = delivery.num
+      formData.name = delivery.name
+      formData.cidade = delivery.cidade || ''
+      formData.ap = delivery.ap
+      formData.manha = delivery.manha
+      formData.brinde = delivery.brinde
+    }
+  },
+  { immediate: true },
+)
+
 const atributos: { key: 'ap' | 'manha' | 'brinde'; label: string; icon: string; activeClass: string; textActiveClass: string; borderColor: string; activeBgClass: string; darkActiveBgClass: string; darkTextActiveClass: string }[] = [
   { key: 'ap', label: 'Apartamento', icon: 'building', activeClass: 'bg-indigo-500 shadow-md shadow-indigo-500/25', textActiveClass: 'text-indigo-500', borderColor: '#6366f1', activeBgClass: 'bg-indigo-50/50', darkActiveBgClass: 'dark:bg-indigo-900/30', darkTextActiveClass: 'dark:text-indigo-400' },
-  { key: 'manha', label: 'Manhã', icon: 'sun', activeClass: 'bg-amber-500 shadow-md shadow-amber-500/25', textActiveClass: 'text-amber-500', borderColor: '#f59e0b', activeBgClass: 'bg-amber-50/50', darkActiveBgClass: 'dark:bg-amber-900/30', darkTextActiveClass: 'dark:text-amber-400' },
+  { key: 'manha', label: 'Manhã', icon: 'sun-full', activeClass: 'bg-amber-500 shadow-md shadow-amber-500/25', textActiveClass: 'text-amber-500', borderColor: '#f59e0b', activeBgClass: 'bg-amber-50/50', darkActiveBgClass: 'dark:bg-amber-900/30', darkTextActiveClass: 'dark:text-amber-400' },
   { key: 'brinde', label: 'Brinde', icon: 'gift', activeClass: 'bg-pink-500 shadow-md shadow-pink-500/25', textActiveClass: 'text-pink-500', borderColor: '#ec4899', activeBgClass: 'bg-pink-50/50', darkActiveBgClass: 'dark:bg-pink-900/30', darkTextActiveClass: 'dark:text-pink-400' },
 ]
 
@@ -270,6 +288,7 @@ const isFormValid = computed(() => {
 })
 
 const isLimitReached = computed(() => {
+  if (isEditing.value) return false
   if (props.currentCount !== undefined && props.maxLimit !== undefined) {
     return props.currentCount >= props.maxLimit
   }

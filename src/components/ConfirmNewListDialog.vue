@@ -55,7 +55,7 @@
               <button
                 ref="confirmBtnRef"
                 @click="handleConfirm"
-                class="flex-1 px-4 py-2.5 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer bg-linear-to-r from-amber-500 to-orange-600 text-white hover:shadow-lg hover:shadow-amber-500/30 hover:scale-[1.02] active:scale-[0.98]"
+                class="flex-1 px-4 py-2.5 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer bg-linear-to-r from-amber-500 to-orange-600 text-white hover:shadow-lg hover:shadow-amber-500/30 hover:scale-[1.02] active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-amber-500/40"
               >
                 <IconSprite name="check" size="18" />
                 Confirmar

@@ -1,5 +1,7 @@
 <template>
-  <main class="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+  <main
+    class="min-h-screen bg-linear-to-br from-slate-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900"
+  >
     <div class="max-w-240 mx-auto w-full px-4 py-6 md:py-8">
       <header class="mb-8">
         <div class="flex items-center gap-3 mb-2">
@@ -16,7 +18,7 @@
             </h1>
             <p class="text-slate-500 dark:text-slate-400 text-sm mt-1 flex items-center gap-2">
               <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#2463eb]"></span>
-              Organize rotas diárias, apartamentos, manhãs e brindes
+              Organize as rotas diárias
             </p>
           </div>
           <button
@@ -24,7 +26,7 @@
             class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-700 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#2463eb]/20"
             :aria-label="darkMode.isDark.value ? 'Modo claro' : 'Modo escuro'"
           >
-            <IconSprite :name="darkMode.isDark.value ? 'sun' : 'moon'" size="20" />
+            <IconSprite :name="darkMode.isDark.value ? 'sun-full' : 'moon'" size="20" />
           </button>
         </div>
       </header>
@@ -36,19 +38,38 @@
         @abrir-modal="handleAbrirModal"
       />
 
-      <DeliveryList :deliveries="list" :limit="limit" :date="date" @remove="handleRemoverDelivery" />
+      <DeliveryList
+        :deliveries="list"
+        :limit="limit"
+        :date="date"
+        @edit="handleEditDelivery"
+        @remove="handleRemoverDelivery"
+      />
+
+      <ConfirmRemoveDeliveryDialog
+        v-if="confirmRemoverDeliveryAberto && deliveryParaRemover"
+        :delivery="deliveryParaRemover"
+        @confirm="handleConfirmarRemocao"
+        @cancel="handleCancelarRemocao"
+      />
 
       <AddDeliveryModal
         v-if="modalAberto"
         :current-count="list.length"
         :max-limit="limit"
-        @close="fecharModal"
+        :edit-delivery="editandoDelivery"
+        @close="handleFecharModal"
         @submit="handleEnviarModal"
       />
 
       <NewListModal
         v-if="novaListaModalAberto"
-        @confirm="handleNovoCommand"
+        @confirm="
+          (data: Date) => {
+            handleNovoCommand(data)
+            novaListaModalAberto = false
+          }
+        "
         @cancel="novaListaModalAberto = false"
       />
 
@@ -68,7 +89,6 @@
         :report-date-str="painelDataRelatorio"
         @close="handleOcultarPainel"
       />
-
     </div>
   </main>
 
@@ -93,6 +113,7 @@ import ActionButtons from '@/components/ActionButtons.vue'
 import ToastNotification from '@/components/ToastNotification.vue'
 import ResolveDuplicateDialog from '@/components/ResolveDuplicateDialog.vue'
 import ConfirmNewListDialog from '@/components/ConfirmNewListDialog.vue'
+import ConfirmRemoveDeliveryDialog from '@/components/ConfirmRemoveDeliveryDialog.vue'
 import NewListModal from '@/components/NewListModal.vue'
 import IconSprite from '@/components/IconSprite.vue'
 
@@ -106,22 +127,28 @@ const {
   date,
   duplicataPendente,
   modalAberto,
+  editandoDelivery,
+  confirmRemoverDeliveryAberto,
+  deliveryParaRemover,
   painelVisivel,
   painelTitulo,
   painelModo,
   painelDadosEntregas,
   painelDadosRelatorio,
   painelDataRelatorio,
-  fecharModal,
   novaListaPendente,
   handleNovoCommand,
   handleConfirmarNovaLista,
   handleCancelarNovaLista,
   handleVerEntregas,
   handleRelatorio,
+  handleEditDelivery,
   handleAbrirModal,
   handleEnviarModal,
+  handleFecharModal,
   handleRemoverDelivery,
+  handleConfirmarRemocao,
+  handleCancelarRemocao,
   handleConfirmarResolucao,
   handleCancelarResolucao,
   handleOcultarPainel,
@@ -133,4 +160,3 @@ onMounted(() => {
   inicializar()
 })
 </script>
-

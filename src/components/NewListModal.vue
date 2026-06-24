@@ -7,11 +7,11 @@
         aria-modal="true"
         aria-label="Nova lista"
         class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm transition-all duration-300"
-        @click.self="$emit('cancel')"
+        @click.self="handleCancel"
       >
         <Transition name="dialog" appear>
           <div
-            class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden transition-all duration-300 transform border border-white/20 dark:border-gray-700/50"
+            class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden transition-all duration-300 transform border border-white/20 dark:border-gray-700/50"
           >
             <div class="relative">
               <div
@@ -30,7 +30,7 @@
                   </div>
                 </div>
                 <button
-                  @click="$emit('cancel')"
+                  @click="handleCancel"
                   class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-slate-100 active:scale-[0.98] transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-[#2463eb]/20"
                   aria-label="Fechar"
                 >
@@ -55,7 +55,7 @@
 
             <div class="flex gap-3 p-6 pt-0 border-t border-slate-200 dark:border-gray-700">
               <button
-                @click="$emit('cancel')"
+                @click="handleCancel"
                 class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-gray-600 text-slate-600 dark:text-gray-300 font-medium hover:bg-slate-50 dark:hover:bg-gray-700 active:scale-[0.98] transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[#2463eb]/20"
               >
                 Cancelar
@@ -63,8 +63,13 @@
               <button
                 ref="confirmBtnRef"
                 :disabled="!selectedDate"
+                :class="[
+                  'flex-1 px-4 py-2.5 rounded-xl font-semibold transition-all flex items-center justify-center gap-2',
+                  selectedDate
+                    ? 'bg-linear-to-r from-[#2463eb] to-[#1a4fc9] text-white hover:shadow-lg hover:shadow-blue-500/30 hover:scale-[1.02] active:scale-[0.98] cursor-pointer focus-visible:ring-2 focus-visible:ring-blue-500/40'
+                    : 'bg-slate-200 dark:bg-gray-600 text-slate-400 dark:text-gray-500 cursor-not-allowed',
+                ]"
                 @click="handleConfirm"
-                class="flex-1 px-4 py-2.5 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer bg-linear-to-r from-[#2463eb] to-[#1a4fc9] text-white hover:shadow-lg hover:shadow-blue-500/30 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
               >
                 <IconSprite name="check" size="18" />
                 Criar lista
@@ -110,6 +115,10 @@ onMounted(() => {
 onUnmounted(() => {
   unlockScroll()
 })
+
+function handleCancel() {
+  emit('cancel')
+}
 
 function handleConfirm() {
   if (!selectedDate.value) return

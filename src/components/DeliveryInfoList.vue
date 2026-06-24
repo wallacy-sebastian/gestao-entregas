@@ -17,7 +17,7 @@
       <div
         v-for="(item, idx) in deliveriesData.list"
         :key="item.num"
-        class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-gray-700 hover:border-[#2463eb]/30 hover:shadow-md transition-all duration-200"
+        class="flex items-start gap-3 p-3 rounded-xl border border-slate-200 dark:border-gray-700 hover:border-[#2463eb]/30 hover:shadow-md transition-all duration-200 active:scale-[0.98]"
       >
         <span class="flex-shrink-0 w-9 h-9 rounded-full bg-linear-to-br from-[#2463eb] to-[#1a4fc9] text-white text-sm font-bold flex items-center justify-center shadow-sm">{{ idx + 1 }}</span>
         <div class="flex-1">
@@ -32,7 +32,7 @@
               Apartamento
             </span>
             <span v-if="item.manha" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400">
-              <IconSprite name="sun" size="10" />
+              <IconSprite name="sun-full" size="10" />
               Manhã
             </span>
             <span v-if="item.brinde" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-pink-50 text-pink-600 dark:bg-pink-900/30 dark:text-pink-400">

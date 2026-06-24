@@ -1,11 +1,10 @@
 import { ref } from 'vue'
-import type { DeliveryListData, ReportStats } from '@/stores/delivery'
+import type { Delivery, DeliveryListData, ReportStats } from '@/stores/delivery'
 
 export type InfoPanelMode = 'no-list' | 'no-deliveries' | 'delivery-list' | 'report'
 
 export function useUIState() {
   const modalAberto = ref(false)
-  const removerModalAberto = ref(false)
   const painelVisivel = ref(false)
   const painelTitulo = ref('Informações')
   const painelModo = ref<InfoPanelMode>('no-list')
@@ -49,25 +48,42 @@ export function useUIState() {
     novaListaPendente.value = null
   }
 
+  const confirmRemoverDeliveryAberto = ref(false)
+  const deliveryParaRemover = ref<Delivery | null>(null)
+
+  function abrirConfirmacaoRemocao(delivery: Delivery): void {
+    deliveryParaRemover.value = delivery
+    confirmRemoverDeliveryAberto.value = true
+  }
+
+  function fecharConfirmacaoRemocao(): void {
+    confirmRemoverDeliveryAberto.value = false
+    deliveryParaRemover.value = null
+  }
+
+  const editandoDelivery = ref<Delivery | null>(null)
+
+  function definirEditandoDelivery(delivery: Delivery | null): void {
+    editandoDelivery.value = delivery
+  }
+
+  function limparEditandoDelivery(): void {
+    editandoDelivery.value = null
+  }
+
   function abrirModal(): void {
     modalAberto.value = true
   }
 
   function fecharModal(): void {
+    editandoDelivery.value = null
     modalAberto.value = false
-  }
-
-  function abrirRemoverModal(): void {
-    removerModalAberto.value = true
-  }
-
-  function fecharRemoverModal(): void {
-    removerModalAberto.value = false
   }
 
   return {
     modalAberto,
-    removerModalAberto,
+    confirmRemoverDeliveryAberto,
+    deliveryParaRemover,
     painelVisivel,
     painelTitulo,
     painelModo,
@@ -75,13 +91,16 @@ export function useUIState() {
     painelDadosRelatorio,
     painelDataRelatorio,
     novaListaPendente,
+    editandoDelivery,
     exibirPainel,
     ocultarPainel,
     definirNovaListaPendente,
     limparNovaListaPendente,
+    definirEditandoDelivery,
+    limparEditandoDelivery,
+    abrirConfirmacaoRemocao,
+    fecharConfirmacaoRemocao,
     abrirModal,
     fecharModal,
-    abrirRemoverModal,
-    fecharRemoverModal,
   }
 }

@@ -62,6 +62,22 @@ export function useDeliveryActions() {
     })
   }
 
+  function handleEditDelivery(numero: string): void {
+    if (store.duplicataPendente) {
+      exibirNotificacao('Resolva a pendência de duplicata primeiro.', true)
+      return
+    }
+    if (!store.date) {
+      exibirNotificacao('Crie uma lista primeiro clicando em "Nova lista".', true)
+      return
+    }
+    const delivery = list.value.find((d) => d && d.num === numero)
+    if (delivery) {
+      ui.definirEditandoDelivery(delivery)
+      ui.abrirModal()
+    }
+  }
+
   function handleAbrirModal(): void {
     if (store.duplicataPendente) {
       exibirNotificacao('Resolva a pendência de duplicata primeiro.', true)
@@ -75,33 +91,43 @@ export function useDeliveryActions() {
   }
 
   function handleEnviarModal(data: DeliveryFormData): void {
-    const result = store.adicionarPedidoLogic(data.num, data.name, data.ap, data.manha, data.brinde, data.cidade)
-    if (result.success || ('isDuplicate' in result && result.isDuplicate)) {
-      ui.fecharModal()
+    if (ui.editandoDelivery.value) {
+      const oldNum = ui.editandoDelivery.value.num
+      const result = store.adicionarPedidoLogic(data.num, data.name, data.ap, data.manha, data.brinde, data.cidade, oldNum)
+      if (result.success) {
+        const idx = list.value.findIndex((d) => d && d.num === oldNum)
+        if (idx !== -1) list.value.splice(idx, 1)
+        ui.fecharModal()
+      }
+    } else {
+      const result = store.adicionarPedidoLogic(data.num, data.name, data.ap, data.manha, data.brinde, data.cidade)
+      if (result.success || ('isDuplicate' in result && result.isDuplicate)) {
+        ui.fecharModal()
+      }
     }
   }
 
-  function handleAbrirRemoverModal(): void {
-    if (store.duplicataPendente) {
-      exibirNotificacao('Resolva a pendência de duplicata primeiro.', true)
-      return
-    }
-    if (list.value.length === 0) {
-      exibirNotificacao('Nenhuma entrega cadastrada para remover.', true)
-      return
-    }
-    ui.abrirRemoverModal()
-  }
-
-  function handleRemoverDoModal(numero: string): void {
-    const result = store.removerPedido(numero)
-    if (result.success) {
-      ui.fecharRemoverModal()
-    }
+  function handleFecharModal(): void {
+    ui.fecharModal()
   }
 
   function handleRemoverDelivery(numero: string): void {
-    store.removerPedido(numero)
+    const delivery = list.value.find((d) => d && d.num === numero)
+    if (delivery) {
+      ui.abrirConfirmacaoRemocao(delivery)
+    }
+  }
+
+  function handleConfirmarRemocao(): void {
+    const delivery = ui.deliveryParaRemover.value
+    if (delivery) {
+      store.removerPedido(delivery.num)
+      ui.fecharConfirmacaoRemocao()
+    }
+  }
+
+  function handleCancelarRemocao(): void {
+    ui.fecharConfirmacaoRemocao()
   }
 
   function handleConfirmarResolucao(existing: string, novo: string): void {
@@ -126,26 +152,28 @@ export function useDeliveryActions() {
     date,
     duplicataPendente,
     modalAberto: ui.modalAberto,
-    removerModalAberto: ui.removerModalAberto,
+    editandoDelivery: ui.editandoDelivery,
+    confirmRemoverDeliveryAberto: ui.confirmRemoverDeliveryAberto,
+    deliveryParaRemover: ui.deliveryParaRemover,
     painelVisivel: ui.painelVisivel,
     painelTitulo: ui.painelTitulo,
     painelModo: ui.painelModo,
     painelDadosEntregas: ui.painelDadosEntregas,
     painelDadosRelatorio: ui.painelDadosRelatorio,
     painelDataRelatorio: ui.painelDataRelatorio,
-    fecharModal: ui.fecharModal,
-    fecharRemoverModal: ui.fecharRemoverModal,
     novaListaPendente: ui.novaListaPendente,
     handleNovoCommand,
     handleConfirmarNovaLista,
     handleCancelarNovaLista,
     handleVerEntregas,
     handleRelatorio,
+    handleEditDelivery,
     handleAbrirModal,
     handleEnviarModal,
-    handleAbrirRemoverModal,
-    handleRemoverDoModal,
+    handleFecharModal,
     handleRemoverDelivery,
+    handleConfirmarRemocao,
+    handleCancelarRemocao,
     handleConfirmarResolucao,
     handleCancelarResolucao,
     handleOcultarPainel,
